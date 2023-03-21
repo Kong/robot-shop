@@ -4,6 +4,7 @@ import os
 
 class Publisher:
     HOST = os.getenv('AMQP_HOST', 'rabbitmq')
+    PORT = os.getenv('AMQP_PORT', "5672")
     VIRTUAL_HOST = '/'
     EXCHANGE='robot-shop'
     TYPE='direct'
@@ -13,8 +14,9 @@ class Publisher:
         self._logger = logger
         self._params = pika.connection.ConnectionParameters(
             host=self.HOST,
+            port=int(self.PORT),
             virtual_host=self.VIRTUAL_HOST,
-            credentials=pika.credentials.PlainCredentials('guest', 'guest'))
+            credentials=pika.credentials.PlainCredentials('test', 'test'))
         self._conn = None
         self._channel = None
 

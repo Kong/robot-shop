@@ -1,11 +1,3 @@
-const instana = require('@instana/collector');
-// init tracing
-// MUST be done before loading anything else!
-instana({
-    tracing: {
-        enabled: true
-    }
-});
 
 const redis = require('redis');
 const request = require('request');
@@ -27,6 +19,7 @@ const counter = new promClient.Counter({
 var redisConnected = false;
 
 var redisHost = process.env.REDIS_HOST || 'redis'
+var redisPort = process.env.REDIS_PORT || 'redis'
 var catalogueHost = process.env.CATALOGUE_HOST || 'catalogue'
 
 const logger = pino({
@@ -49,16 +42,6 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    let dcs = [
-        "asia-northeast2",
-        "asia-south1",
-        "europe-west3",
-        "us-east1",
-        "us-west1"
-    ];
-    let span = instana.currentSpan();
-    span.annotate('custom.sdk.tags.datacenter', dcs[Math.floor(Math.random() * dcs.length)]);
-
     next();
 });
 
@@ -359,7 +342,7 @@ function calcTax(total) {
 
 function getProduct(sku) {
     return new Promise((resolve, reject) => {
-        request('http://' + catalogueHost + ':8080/product/' + sku, (err, res, body) => {
+        request('http://' + catalogueHost + ':80/product/' + sku, (err, res, body) => {
             if(err) {
                 reject(err);
             } else if(res.statusCode != 200) {
@@ -388,7 +371,8 @@ function saveCart(id, cart) {
 
 // connect to Redis
 var redisClient = redis.createClient({
-    host: redisHost
+    host: redisHost,
+    port: redisPort
 });
 
 redisClient.on('error', (e) => {
@@ -404,4 +388,3 @@ const port = process.env.CART_SERVER_PORT || '8080';
 app.listen(port, () => {
     logger.info('Started on port', port);
 });
-

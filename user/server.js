@@ -1,11 +1,3 @@
-const instana = require('@instana/collector');
-// init tracing
-// MUST be done before loading anything else!
-instana({
-    tracing: {
-        enabled: true
-    }
-});
 
 const mongoClient = require('mongodb').MongoClient;
 const mongoObjectID = require('mongodb').ObjectID;
@@ -42,16 +34,6 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    let dcs = [
-        "asia-northeast2",
-        "asia-south1",
-        "europe-west3",
-        "us-east1",
-        "us-west1"
-    ];
-    let span = instana.currentSpan();
-    span.annotate('custom.sdk.tags.datacenter', dcs[Math.floor(Math.random() * dcs.length)]);
-
     next();
 });
 
@@ -256,7 +238,8 @@ app.get('/history/:id', (req, res) => {
 
 // connect to Redis
 var redisClient = redis.createClient({
-    host: process.env.REDIS_HOST || 'redis'
+    host: process.env.REDIS_HOST || 'redis',
+    port: process.env.REDIS_PORT || 6379
 });
 
 redisClient.on('error', (e) => {
@@ -300,4 +283,3 @@ const port = process.env.USER_SERVER_PORT || '8080';
 app.listen(port, () => {
     logger.info('Started on port', port);
 });
-
