@@ -1,0 +1,75 @@
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: catalogue-mongodb
+spec:
+  members: 1
+  type: ReplicaSet
+  version: "4.2.6"
+  security:
+    authentication:
+      modes: ["SCRAM"]
+  statefulSet:
+    spec:
+      template:
+        metadata:
+          annotations:
+            traffic.kuma.io/exclude-inbound-ports: "5000"
+  users:
+    - name: my-user
+      db: admin
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: my-user-password
+      roles:
+        - name: clusterAdmin
+          db: admin
+        - name: userAdminAnyDatabase
+          db: admin
+      scramCredentialsSecretName: my-scram-1
+    - name: catalogue-user
+      db: catalogue
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: my-catalogue-user-password
+      roles:
+        - name: dbOwner
+          db: catalogue
+      scramCredentialsSecretName: my-scram-2
+    - name: users-user
+      db: users
+      passwordSecretRef: # a reference to the secret that will be used to generate the user's password
+        name: my-users-user-password
+      roles:
+        - name: dbOwner
+          db: users
+      scramCredentialsSecretName: my-scram-3
+
+  additionalMongodConfig:
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+
+# the user credentials will be generated from this secret
+# once the credentials are generated, this secret is no longer required
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-user-password
+type: Opaque
+stringData:
+  password: junk
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-catalogue-user-password
+type: Opaque
+stringData:
+  password: junk
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-users-user-password
+type: Opaque
+stringData:
+  password: junk

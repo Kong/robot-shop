@@ -1,0 +1,14 @@
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: mycluster
+spec:
+  secretName: mypwds
+  tlsUseSelfSigned: true
+  instances: 1
+  podAnnotations:
+    traffic.kuma.io/exclude-outbound-ports: "443"
+  router:
+    podAnnotations:
+      kuma.io/gateway: enabled
+    instances: 1
