@@ -1,0 +1,11 @@
+ingress:
+  enabled: true
+  annotations:
+    konghq.com/strip-path: "false"
+    kubernetes.io/ingress.class: kong
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - paths:
+      - "/"
+      host: keycloak.kong-sales-engineering.com
+  tls: []

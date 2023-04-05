@@ -1,0 +1,16 @@
+apiVersion: kuma.io/v1alpha1
+kind: MeshTrafficPermission
+metadata:
+  namespace: kong-mesh-system
+  name: allow-backend-mysql-application
+spec:
+  targetRef:
+    kind: MeshService
+    name: mycluster-instances_mysql-operator_svc_3306
+  from:
+    - targetRef:
+        kind: MeshSubset
+        tags:
+          robot-shop-application-catagory: backend-mysql
+      default:
+        action: Allow

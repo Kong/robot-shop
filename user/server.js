@@ -98,6 +98,7 @@ app.get('/users', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
+    console.log("user: ", req.get("x-idp-username"));
     req.log.info('login', req.body);
     if(req.body.name === undefined || req.body.password === undefined) {
         req.log.warn('credentails not complete');
