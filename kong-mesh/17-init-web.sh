@@ -14,14 +14,9 @@ if [ -z $KONG_OIDC_CLIENT_SECRET ]; then
 fi
 
 
-if [ -z $KONG_OIDC_SESSION_SECRET ]; then
-  echo Must "export KONG_OIDC_SESSION_SECRET"
-  exit
-fi
-
 OIDC_CONFIG_FILE="oidc_secret.yaml"
 
-cat oidc_secret_tmp.yaml | envsubst '$KONG_OIDC_CLIENT_ID $KONG_OIDC_CLIENT_SECRET $KONG_OIDC_SESSION_SECRET' > $OIDC_CONFIG_FILE
+cat oidc_secret_tmp.yaml | envsubst '$KONG_OIDC_CLIENT_ID $KONG_OIDC_CLIENT_SECRET' > $OIDC_CONFIG_FILE
 
 kubectl apply -f $OIDC_CONFIG_FILE -n $NAMESPACE
 
