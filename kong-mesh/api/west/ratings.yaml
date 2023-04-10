@@ -14,6 +14,7 @@ metadata:
   namespace: web
   annotations:
     konghq.com/strip-path: "true"
+    konghq.com/plugins: openid-connect-kong
 spec:
   ingressClassName: kong
   rules:
