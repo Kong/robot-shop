@@ -18,7 +18,7 @@ metadata:
 spec:
   ingressClassName: kong
   rules:
-  - host: web-east.local
+  - host: robot-shop-east.kong-sales-engineering.com
     http:
       paths:
       - backend:

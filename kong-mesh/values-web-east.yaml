@@ -48,7 +48,7 @@ ingress:
   annotations:
     konghq.com/plugins: openid-connect-kong
   hosts:
-    - host: web-east.local
+    - host: robot-shop-east.kong-sales-engineering.com
       paths:
         - path: /
           pathType: ImplementationSpecific

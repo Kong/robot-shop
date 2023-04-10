@@ -13,11 +13,11 @@ metadata:
   name: shipping-api
   namespace: web
   annotations:
-    konghq.com/strip-path: "true"    
+    konghq.com/strip-path: "true"
 spec:
   ingressClassName: kong
   rules:
-  - host: web-west.local
+  - host: robot-shop-west.kong-sales-engineering.com
     http:
       paths:
       - backend:
