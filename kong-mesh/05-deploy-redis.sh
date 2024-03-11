@@ -7,7 +7,7 @@ echo \
 kind: Namespace
 metadata:
   name: $NAMESPACE
-  annotations:
+  labels:
     kuma.io/sidecar-injection: enabled" | kubectl apply -f -
 
 kubectl apply -f redis.yaml -n $NAMESPACE

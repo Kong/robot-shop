@@ -9,7 +9,7 @@ echo \
 kind: Namespace
 metadata:
   name: $NAMESPACE
-  annotations:
+  labels:
     kuma.io/sidecar-injection: enabled" | kubectl apply -f -
 
 helm upgrade -i my-release my-repo/rabbitmq --namespace $NAMESPACE
